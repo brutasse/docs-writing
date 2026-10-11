@@ -11,6 +11,8 @@ The repo has two parts:
 - `scripts/check-docs-english.py` — the checker, a Python 3 script with
   no dependencies
 
+`bash tests/run.sh` runs the checker's regression fixtures.
+
 ## Prose rules
 
 The skill applies a small set of rules:
@@ -51,6 +53,8 @@ It checks each sentence in a paragraph or list item:
 - Progressive forms (`is building`)
 - Passive voice (a heuristic)
 - Banned words: `etc.`, `e.g.`, `i.e.`, `&`, `let's`, contractions
+- LLM clichés (ported from Simon Willison's
+  [cliché highlighter](https://tools.simonwillison.net/llm-cliche-highlighter))
 
 It skips headings, tables, code blocks, inline code, and link targets.
 It exempts `docs/index.md` and sections under a "Why ..." heading.
@@ -62,9 +66,12 @@ threshold, which defaults to 0.80.
 ```
 python3 scripts/check-docs-english.py docs/ --threshold 0.9
 python3 scripts/check-docs-english.py docs/ --examples 5
+python3 scripts/check-docs-english.py marketing/ --cliches-only
 ```
 
 `--examples N` prints the first N violations of each file.
+`--cliches-only` checks only for LLM clichés: no style rules, no
+exempted files or sections.
 
 ## Install
 

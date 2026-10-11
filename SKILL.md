@@ -1,6 +1,6 @@
 ---
 name: docs-writing
-description: Use when writing, editing, or reviewing user-facing technical documentation prose (guides, reference pages, READMEs, changelogs) — or when prose is called wordy, vague, passive, idiomatic, or hard for non-native speakers to follow.
+description: Use when writing, editing, or reviewing user-facing technical documentation prose (guides, reference pages, READMEs, changelogs) — or when prose is called wordy, vague, passive, idiomatic, hard for non-native speakers to follow, or AI-sounding (LLM clichés such as "delve", "not just X, but Y", "here is the thing", "experts argue").
 ---
 
 # Docs Writing (Simplified Technical English)
@@ -46,6 +46,30 @@ A style pass must not change facts:
 - From given facts, state only those facts. Do not invent mechanisms or
   failure behavior ("the command fails with a hint") to fill gaps.
 
+## LLM clichés
+
+LLM prose has known tells: stock phrasings that carry no fact. The checker
+flags them and names the fix. Families: staged reveals ("here is the thing",
+"the punchline is", "turns out", "you already know"), negative parallelism
+("not just X, but Y", "not X, but Y", "no X, no Y, no Z", "isn't X. It is
+Y."), framing and hedging ("it is important to note", "experts argue",
+"time will tell", "that is why it mattered", "stands as a testament", "plays
+a crucial role"), AI vocabulary ("delve", "seamless", "pivotal",
+"meticulous"), promo tone ("boasts", "hidden gem", "in the heart of"), and
+chatbot leftovers ("as of my last update"). A fixed sentence states the fact
+the tell gestures at. Rephrasing a tell is not fixing it: "time will reveal"
+keeps the tell of "time will tell".
+
+Tells the checker cannot see, because they span sentences; never write them:
+
+- Two or more questions in a row ("Do I trust it? Do I use it?").
+- Three consecutive sentences opening on the same word ("Maybe X. Maybe Y.
+  Maybe Z.").
+- Consecutive sentences on the same skeleton ("A reads both. B reads both.").
+
+Colon-into-a-triple ("ports, processes, and state") stays unflagged on
+purpose: in reference prose it is usually a real enumeration.
+
 ## Checker
 
 Run the skill's own script, verbatim, from anywhere:
@@ -55,8 +79,8 @@ Run the skill's own script, verbatim, from anywhere:
 Pass any file or directory instead of `docs/`. Do not copy or adapt it
 into the project. It reports per-file clean rates and exits non-zero
 below the threshold (default 80%, override `--threshold`). It flags
-sentence length, modals, progressives, passive voice, and banned
-phrasings; `docs/index.md` is exempt by design. Known traps it already
+sentence length, modals, progressives, passive voice, banned phrasings, and
+LLM clichés; `docs/index.md` is exempt by design. Known traps it already
 handles, and rules for any future fix:
 
 - Each list item is its own block; never "fix" that by merging items.
@@ -65,6 +89,8 @@ handles, and rules for any future fix:
   whitelisted. On a new false positive, fix this script's whitelist —
   never mangle prose to satisfy the checker, and never edit a copy.
 
+Checker changes are regression-tested: `bash tests/run.sh`.
+
 ## Where the rules bend
 
 Editorial sections (homepages, "Why X") are exempt — check around them
@@ -72,6 +98,13 @@ by passing explicit file paths. `docs/index.md` is already exempt.
 Confirm exemptions with your human partner. Changelog entries can use
 past tense but stay active. Code, tables, and command output are not
 prose.
+
+Clichés apply everywhere, style rules do not. For exempt prose or an
+"remove only the AI tells" request, run the checker with
+`--cliches-only`: it checks every file (no exemptions), flags only
+clichés, and leaves voice, contractions, and sentence shapes alone. Fix
+only the flagged phrasings plus the three cross-sentence tells; change
+nothing else.
 
 ## Common mistakes
 
